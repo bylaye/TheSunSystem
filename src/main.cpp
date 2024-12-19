@@ -10,9 +10,11 @@
 
 int main ()
 {
-   
+   	float mapWidth = 1200;
+   	float mapHeight = 800;
+
     float centerX = 200; 
-    float centerY = 300; 
+    float centerY = mapHeight/2; 
 
     std::vector<std::unique_ptr<Objects>> objects;
     objects.push_back(std::make_unique<Naturals> ("sun", sf::Vector2f(0, 1), 10e30, sf::Color::Yellow, 70, sf::Vector2f(centerX, centerY)) );
@@ -21,12 +23,12 @@ int main ()
     objects.push_back(std::make_unique<Naturals> ("Earth", sf::Vector2f(0, 1), 10e30, sf::Color(10,10,200), 50, sf::Vector2f(centerX+400, centerY)) );
     objects.push_back(std::make_unique<Naturals> ("Mars", sf::Vector2f(0, 1), 10e30, sf::Color(200,10,0), 35, sf::Vector2f(centerX+500, centerY)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
-    objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+400)) );
+    objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+200)) );
 
-    sf::RenderWindow app(sf::VideoMode(1200, 800), "SFML window");
+    sf::RenderWindow app(sf::VideoMode(mapWidth, mapHeight), "SFML window");
 
     sf::Event event;
-    std::unique_ptr<Objects> selectedObject = nullptr;
+    Objects* selectedObject = nullptr;
     while (app.isOpen())
     {
         while (app.pollEvent(event))
@@ -50,9 +52,8 @@ int main ()
                             float distance = std::sqrt(dx * dx + dy * dy);
 
                             if (distance <= radius) {
-                                // TODO: Pouvoir copier l'ojbet selectionner dans selectedObject
-                                // selectedObject = obj;
-                                std::cout << "Object selected : " << obj->getName() << "\n";
+                                selectedObject = obj.get();
+                                std::cout << "Planet selected : " << obj->getName() << "\n";
                                 break;
                             }
                         }
@@ -64,8 +65,8 @@ int main ()
                             {
                                 if ( (mousePos.y >= (objPos.y - h/2)) && mousePos.y <=(objPos.y + h/2) )
                                 {
-                                    // TODO: Pouvoir copier l'ojbet selectionner dans selectedObject
-                                    std::cout << "selected " << obj->getName() << "\n";
+                                    selectedObject = obj.get();
+                                    std::cout << "Artificial selected " << obj->getName() << "\n";
                                     break; 
                                 }
                             } 
