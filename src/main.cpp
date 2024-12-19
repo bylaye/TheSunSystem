@@ -2,6 +2,7 @@
 #include <Objects.hpp>
 #include <Naturals.hpp>
 #include <Artificials.hpp>
+#include <memory>
 #include <unistd.h>
 #include <vector>
 
@@ -9,62 +10,82 @@
 
 int main ()
 {
-    Objects o("planet", sf::Vector2f(12, 13), 1000e10, sf::Color::Black, new sf::CircleShape(30),{10,10} );
-    std::cout << o.getName() << "\n" << static_cast<int>(o.getColor().r)<< "\n";
+   
+    float centerX = 200; 
+    float centerY = 300; 
 
-    Naturals sun("sun", sf::Vector2f(0, 1), 10e30, sf::Color::Yellow, 70, {200, 300});
-    Naturals mercury("Mercury", {0, 1}, 10e23, sf::Color(50,40,20), 30, {400, 300});
-    Naturals venus("Venus", {0, 1}, 10e24, sf::Color(120,40,150, 50), 40, {500, 300});
-    Naturals earth("Earth", {0, 1}, 10e25, sf::Color::Blue, 45, {600, 300});
-    
-    
-    //const std::vector<Naturals>& objects {sun, mercury, venus, earth};
-    /*
-    objects.push_back(std::make_unique<Naturals>(sun));
-    objects.push_back(std::make_unique<Naturals>(mercury));
-    objects.push_back(std::make_unique<Naturals>(venus));
-    objects.push_back(std::make_unique<Naturals>(earth));
-    //objects.push_back(earth);
-    */
-    
-    Artificials sat("sun", sf::Vector2f(0, 1), 10e23, sf::Color::Blue, sf::Vector2f(60, 50), {300, 500});
-
-    std::cout << sun.getName() << " " << sun.getMass()<< "\n";
-    std::cout << "Hello Solar System \n";
+    std::vector<std::unique_ptr<Objects>> objects;
+    objects.push_back(std::make_unique<Naturals> ("sun", sf::Vector2f(0, 1), 10e30, sf::Color::Yellow, 70, sf::Vector2f(centerX, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("Mercury", sf::Vector2f(0, 1), 10e30, sf::Color(169,169,169), 30, sf::Vector2f(centerX+200, centerY)));
+    objects.push_back(std::make_unique<Naturals> ("Venus", sf::Vector2f(0, 1), 10e30, sf::Color(100,100,100), 40, sf::Vector2f(centerX+300, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("Earth", sf::Vector2f(0, 1), 10e30, sf::Color(10,10,200), 50, sf::Vector2f(centerX+400, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("Mars", sf::Vector2f(0, 1), 10e30, sf::Color(200,10,0), 35, sf::Vector2f(centerX+500, centerY)) );
+    objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
+    objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+400)) );
 
     sf::RenderWindow app(sf::VideoMode(1200, 800), "SFML window");
 
-    /*
-    sf::Texture texture;
-    if (!texture.loadFromFile("cb.bmp"))
-        return EXIT_FAILURE;
-    sf::Sprite sprite(texture);
-    */
-
+    sf::Event event;
+    std::unique_ptr<Objects> selectedObject = nullptr;
     while (app.isOpen())
     {
-        sf::Event event;
         while (app.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 app.close();
+
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == sf::Mouse::Left){
+                    sf::Vector2i mousePos = sf::Mouse::getPosition(app);
+                    std::cout << "Mouse Left pressed x= " << mousePos.x << "\n";
+                                       
+                    for (auto& obj : objects) {
+                        sf::Vector2f objPos = obj->getShapePosition();
+                        if (obj->getIsNatural())
+                        {
+                            float radius = obj->getShapeDimension().x;
+                            float dx = mousePos.x - objPos.x;
+                            float dy = mousePos.y - objPos.y;
+                            float distance = std::sqrt(dx * dx + dy * dy);
+
+                            if (distance <= radius) {
+                                // TODO: Pouvoir copier l'ojbet selectionner dans selectedObject
+                                // selectedObject = obj;
+                                std::cout << "Object selected : " << obj->getName() << "\n";
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            float w = obj->getShapeDimension().x;
+                            float h = obj->getShapeDimension().y;
+                            if ( (mousePos.x >= (objPos.x - w/2)) && mousePos.x <=(objPos.x + w/2) )
+                            {
+                                if ( (mousePos.y >= (objPos.y - h/2)) && mousePos.y <=(objPos.y + h/2) )
+                                {
+                                    // TODO: Pouvoir copier l'ojbet selectionner dans selectedObject
+                                    std::cout << "selected " << obj->getName() << "\n";
+                                    break; 
+                                }
+                            } 
+                        }
+                    }                    
+
+                }
+            }
+            
         }
+
         usleep(5000);
         app.clear(sf::Color(10,40,40, 100));
-        sun.draw(app);
-        mercury.draw(app);
-        venus.draw(app);
-        earth.draw(app);
-        sat.draw(app);
-        o.draw(app);
+
+        for(const auto& p : objects) { 
+            p->draw(app); 
+        }
+
         app.display();
     }
-
-    for(const auto& p : {sun,earth})
-    {
-        std::cout << p.getName() << "\n";
-    }
-
+    
     return EXIT_SUCCESS;
-
 }
