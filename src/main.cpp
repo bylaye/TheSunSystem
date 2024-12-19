@@ -41,7 +41,8 @@ int main ()
                 if (event.mouseButton.button == sf::Mouse::Left){
                     sf::Vector2i mousePos = sf::Mouse::getPosition(app);
                     std::cout << "Mouse Left pressed x= " << mousePos.x << "\n";
-                                       
+                    selectedObject = nullptr;
+                          
                     for (auto& obj : objects) {
                         sf::Vector2f objPos = obj->getShapePosition();
                         if (obj->getIsNatural())
@@ -73,6 +74,20 @@ int main ()
                         }
                     }                    
 
+                }
+            }
+            // Delete selected object with Delete button pressed
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Delete && selectedObject) {
+                    std::cout << "Deleting object: " << selectedObject->getName() << "\n";
+					
+					for (auto it = objects.begin(); it != objects.end(); ++it) {
+						if (it->get() == selectedObject) {
+							objects.erase(it);
+							break;
+						}
+					}
+                    selectedObject = nullptr;
                 }
             }
             
