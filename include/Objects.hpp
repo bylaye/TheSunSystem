@@ -26,7 +26,7 @@ class Objects
 
     public:
         Objects(std::string name, sf::Vector2f pos, double m, sf::Color c, std::unique_ptr<sf::Shape> s, sf::Vector2f shapePos)
-        : name(name), position(pos), mass(m), color(c), shape(std::move(s))
+        : name(name), position(pos), mass(m), color(c), shape(std::move(s)), acceleration(10), velocity(0)
         {
             shape->setPosition(shapePos);
             shape->setFillColor(color);
@@ -72,8 +72,8 @@ class Objects
             return sf::Vector2f(0.0f, 0.0f);
         };
 
-        /*
-        void updateAcceleration(const std::vector<std::shared_ptr<Objects>>& objects)
+        
+        void updateAcceleration(const std::vector<std::unique_ptr<Objects>>& objects)
         {
             double ax = 0;
             double ay = 0;
@@ -92,8 +92,11 @@ class Objects
             }
             this->acceleration = std::sqrt(ax*ax + ay*ay);
         };
-        */
-
+        
+		void updateVelocity(float timestamp)
+		{
+			// TODO: Calculer la vitesse par rapport a acceleration 
+		}
 };
 
 #endif // OBJECT_HPP_INCLUDED

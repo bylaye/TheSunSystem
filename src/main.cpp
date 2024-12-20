@@ -17,11 +17,11 @@ int main ()
     float centerY = mapHeight/2; 
 
     std::vector<std::unique_ptr<Objects>> objects;
-    objects.push_back(std::make_unique<Naturals> ("sun", sf::Vector2f(0, 1), 10e30, sf::Color::Yellow, 70, sf::Vector2f(centerX, centerY)) );
-    objects.push_back(std::make_unique<Naturals> ("Mercury", sf::Vector2f(0, 1), 10e30, sf::Color(169,169,169), 30, sf::Vector2f(centerX+200, centerY)));
-    objects.push_back(std::make_unique<Naturals> ("Venus", sf::Vector2f(0, 1), 10e30, sf::Color(100,100,100), 40, sf::Vector2f(centerX+300, centerY)) );
-    objects.push_back(std::make_unique<Naturals> ("Earth", sf::Vector2f(0, 1), 10e30, sf::Color(10,10,200), 50, sf::Vector2f(centerX+400, centerY)) );
-    objects.push_back(std::make_unique<Naturals> ("Mars", sf::Vector2f(0, 1), 10e30, sf::Color(200,10,0), 35, sf::Vector2f(centerX+500, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("sun", sf::Vector2f(0, 0), 1.989e30, sf::Color::Yellow, 70, sf::Vector2f(centerX, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("Mercury", sf::Vector2f(5.791e10, 1), 3.3011e23, sf::Color(169,169,169), 30, sf::Vector2f(centerX+200, centerY)));
+    objects.push_back(std::make_unique<Naturals> ("Venus", sf::Vector2f(1.082e11, 0), 4.8675e24, sf::Color(100,100,100), 40, sf::Vector2f(centerX+300, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("Earth", sf::Vector2f(1.496e11, 0), 5.9724e24, sf::Color(10,10,200), 50, sf::Vector2f(centerX+400, centerY)) );
+    objects.push_back(std::make_unique<Naturals> ("Mars", sf::Vector2f(2.279e11, 0), 6.4171e23, sf::Color(200,10,0), 35, sf::Vector2f(centerX+500, centerY)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+200)) );
 
@@ -54,7 +54,7 @@ int main ()
 
                             if (distance <= radius) {
                                 selectedObject = obj.get();
-                                std::cout << "Planet selected : " << obj->getName() << "\n";
+                                std::cout << "Planet selected : " << obj->getName() << "acc: " << obj->getAcceleration() <<"\n";
                                 break;
                             }
                         }
@@ -97,6 +97,7 @@ int main ()
         app.clear(sf::Color(10,40,40, 100));
 
         for(const auto& p : objects) { 
+        	p->updateAcceleration(objects);
             p->draw(app); 
         }
 
