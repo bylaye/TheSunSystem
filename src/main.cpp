@@ -7,12 +7,6 @@
 #include <vector>
 #include <sstream>
 
-//#include <SFML/Graphics.hpp>
-
-struct TrailedObject {
-    std::unique_ptr<Objects> object;
-    std::vector<sf::Vertex> trail; // Trajectoire
-};
 
 int main ()
 {
@@ -25,21 +19,18 @@ int main ()
 	float timestep = 3600;
 
     std::vector<std::unique_ptr<Objects>> objects;
-/*
-    objects.push_back(std::make_unique<Naturals> ("sun", sf::Vector2f(0, 0), 1.989e30, sf::Color::Yellow, 70, sf::Vector2f(centerX, centerY)) );
-    objects.push_back(std::make_unique<Naturals> ("Mercury", sf::Vector2f(5.791e10, 1), 3.3011e23, sf::Color(169,169,169), 30, sf::Vector2f(centerX+200, centerY)));
-    objects.push_back(std::make_unique<Naturals> ("Venus", sf::Vector2f(1.082e11, 0), 4.8675e24, sf::Color(100,100,100), 40, sf::Vector2f(centerX+300, centerY)) );
-    objects.push_back(std::make_unique<Naturals> ("Earth", sf::Vector2f(1.496e11, 0), 5.9724e24, sf::Color(10,10,200), 50, sf::Vector2f(centerX+400, centerY)) );
-    objects.push_back(std::make_unique<Naturals> ("Mars", sf::Vector2f(2.279e11, 0), 6.4171e23, sf::Color(200,10,0), 35, sf::Vector2f(centerX+500, centerY)) );
-    objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
-    objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+200)) );
-*/
-	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 20.0f, 0, sf::Color::Yellow));
+
+	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 40.0f, 0, sf::Color::Yellow));
     objects.push_back(std::make_unique<Naturals>("Mercury", 3.3011e23, 5.791e10, 300.0, 8, 1e-9,  sf::Color::Green));
     objects.push_back(std::make_unique<Naturals>("Venus", 4.8675e24, 1.082e11, 300.0, 10, 1e-9,  sf::Color::Red));
     objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 1.496e11, 300.0, 12, 1.e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 9, 1.e-9,  sf::Color(200,100,50)));
     objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 1.496e11 + 3.844e8, 300.0, 5, 1.3e-9, sf::Color::White));
+    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 9, 1.e-9,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Jupyter", 1.8982e27, 7.785e11, 300.0, 29, 3.72e-10,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Saturn", 5.6834e26, 1.433e12, 300.0, 19, 2.5e-10,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Unranus", 8.6810e25, 2.877e12, 300.0, 15, 1.4e-10,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Neptune", 1.0241e26, 4.503e12, 300.0, 17, 1.1e-10,  sf::Color(200,100,50)));
+
 
 
 	for(const auto& p : objects) { 
@@ -49,13 +40,7 @@ int main ()
 	for(const auto& p : objects) { 
 		std::cout << p->getName() << " vy: " << p-> getVy() << "\n";
 	}
-	/*
-    objects.push_back(std::make_unique<Naturals>("Jupyter", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Saturn", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("uranus", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Neptune", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 400.0 + 1.496e11 + 3.844e8, 300.0, 29.78e3 + 1.022e3, 1, 6.4e-9, sf::Color::White));
-	*/
+
 
 	sf::Font font;
     if (!font.loadFromFile("assets/arial.ttf")) {
