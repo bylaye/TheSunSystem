@@ -5,8 +5,14 @@
 #include <memory>
 #include <unistd.h>
 #include <vector>
+#include <sstream>
 
 //#include <SFML/Graphics.hpp>
+
+struct TrailedObject {
+    std::unique_ptr<Objects> object;
+    std::vector<sf::Vertex> trail; // Trajectoire
+};
 
 int main ()
 {
@@ -15,6 +21,8 @@ int main ()
 
     float centerX = 200; 
     float centerY = mapHeight/2; 
+
+	float timestep = 3600;
 
     std::vector<std::unique_ptr<Objects>> objects;
 /*
@@ -26,11 +34,41 @@ int main ()
     objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+200)) );
 */
-	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 400.0, 300.0, 20.0f, sf::Color::Yellow));
-    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 400.0 + 1.496e11, 300.0, 10.0f, sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 400.0 + 1.496e11 + 3.844e8, 300.0, 5.0f, sf::Color::White));
+	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 0, 20.0f, 0, sf::Color::Yellow));
+    objects.push_back(std::make_unique<Naturals>("Mercury", 3.3011e23, 5.791e10, 300.0, 47.8777e3, 8, 1e-9,  sf::Color::Green));
+    objects.push_back(std::make_unique<Naturals>("Venus", 4.8675e24, 1.082e11, 300.0, 35.026e3, 10, 1e-9,  sf::Color::Red));
+    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 1.496e11, 300.0, 29.78e3, 12, 1.e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 24.134e3, 9, 1.e-9,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 400.0 + 1.496e11 + 3.844e8, 300.0, 29.78e3 + 1.022e3, 5, 1.3e-9, sf::Color::White));
 
-    sf::RenderWindow app(sf::VideoMode(mapWidth, mapHeight), "SFML window");
+
+	for(const auto& p : objects) { 
+		p->initialiseVelocity(objects);
+	}
+
+	for(const auto& p : objects) { 
+		std::cout << p->getName() << " vy: " << p-> getVy() << "\n";
+	}
+	/*
+    objects.push_back(std::make_unique<Naturals>("Jupyter", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Saturn", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("uranus", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Neptune", 5.972e24, 400.0 + 1.496e11, 300.0, 29.78e3, 2, 6.4e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 400.0 + 1.496e11 + 3.844e8, 300.0, 29.78e3 + 1.022e3, 1, 6.4e-9, sf::Color::White));
+	*/
+
+	sf::Font font;
+    if (!font.loadFromFile("assets/arial.ttf")) {
+        return -1;
+    }
+
+    sf::Text infoText;
+    infoText.setFont(font);
+    infoText.setCharacterSize(16);
+    infoText.setFillColor(sf::Color::Blue);
+    infoText.setPosition(mapWidth * 0.7f + 10, 10);
+	
+	sf::RenderWindow app(sf::VideoMode(mapWidth, mapHeight), "SFML window");
 
     sf::Event event;
     Objects* selectedObject = nullptr;
@@ -40,6 +78,14 @@ int main ()
         {
             if (event.type == sf::Event::Closed)
                 app.close();
+
+			if (event.type == sf::Event::KeyPressed) {
+		        if (event.key.code == sf::Keyboard::Up) {
+		            timestep = std::min(timestep + 3600.0f, 3600.0f * 24 * 365);
+		        } else if (event.key.code == sf::Keyboard::Down) {
+		            timestep = std::max(3600.0f, timestep - 3600);
+		        }
+		    }
 
             if (event.type == sf::Event::MouseButtonPressed)
             {
@@ -84,11 +130,11 @@ int main ()
             // Delete selected object with Delete button pressed
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Delete && selectedObject) {
-                    std::cout << "Deleting object: " << selectedObject->getName() << "\n";
-					
+			
 					for (auto it = objects.begin(); it != objects.end(); ++it) {
 						if (it->get() == selectedObject) {
 							objects.erase(it);
+                    		std::cout << "Deleting object: " << selectedObject->getName() << "\n";
 							break;
 						}
 					}
@@ -99,20 +145,39 @@ int main ()
         }
 
         usleep(5000);
-        app.clear(sf::Color(10,40,40, 100));
+		std::ostringstream output;
+		
+		output << "Time Step: " << timestep << "\n";
 
+        app.clear(sf::Color(10,40,40, 100));
+		
         for(const auto& p : objects) { 
         	p->updateAcceleration(objects);
-			//p->draw(app); 
         }
 
         for(const auto& p : objects) { 
-        	p->updatePosition(3600/2);
+        	p->update(timestep);
         }
 
-        for(const auto& p : objects) { 
+        for(const auto& p : objects) {
+			if (!selectedObject){
+				output << p->getName() << " : vx = " << p->getVx() << " vy= "<< p->getVy()  <<"\n";
+			}
             p->draw(app); 
         }
+
+		// print object selected description
+		if (selectedObject)
+		{
+			output << selectedObject->getName() << "\n";
+			output << "Mass : " << selectedObject->getMass() << "\n";
+			output << "Real Pos x: "<< selectedObject->getPosX();
+			output << " y: "<< selectedObject->getPosY() << "\n";
+		}
+		
+		infoText.setString(output.str());
+		app.draw(infoText);
+		
         app.display();
     }
     
