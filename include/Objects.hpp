@@ -77,6 +77,11 @@ class Objects
 			return sf::Vector2f(0.0f, 0.0f);
 		};
 
+		double sphereHill(double M, double m, double d)
+		{
+			//TODO
+			return d * std::pow(m/(3.0*M), 1.0/3.0); 
+		}
 
 		void initialiseVelocity(const std::vector<std::unique_ptr<Objects>>& objects)
 		{
@@ -87,6 +92,13 @@ class Objects
 					double dx = obj->getPosX() - posX;
 					double dy = obj->getPosY() - posY;
 					double distance = std::sqrt(dx * dx + dy * dy);
+					if (mass < obj->getMass())
+					{
+						double radiusHill = sphereHill(obj->getMass(), mass, distance);
+						std::cout << name << " S - H: "<< obj->getName() <<" r: " << radiusHill << " d= " << distance << "\n";
+						if (radiusHill > distance)
+							std::cout << name << " in S-H :" << obj->getName() << " \n";
+					}
 					vy += std::sqrt(G * obj->getMass() / distance);
 				}
 			}
