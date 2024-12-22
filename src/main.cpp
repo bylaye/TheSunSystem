@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Objects.hpp>
 #include <Naturals.hpp>
-#include <Artificials.hpp>
+//#include <Artificials.hpp>
 #include <memory>
 #include <unistd.h>
 #include <vector>
@@ -17,6 +17,7 @@ int main ()
     float centerY = mapHeight/2; 
 
     std::vector<std::unique_ptr<Objects>> objects;
+/*
     objects.push_back(std::make_unique<Naturals> ("sun", sf::Vector2f(0, 0), 1.989e30, sf::Color::Yellow, 70, sf::Vector2f(centerX, centerY)) );
     objects.push_back(std::make_unique<Naturals> ("Mercury", sf::Vector2f(5.791e10, 1), 3.3011e23, sf::Color(169,169,169), 30, sf::Vector2f(centerX+200, centerY)));
     objects.push_back(std::make_unique<Naturals> ("Venus", sf::Vector2f(1.082e11, 0), 4.8675e24, sf::Color(100,100,100), 40, sf::Vector2f(centerX+300, centerY)) );
@@ -24,6 +25,10 @@ int main ()
     objects.push_back(std::make_unique<Naturals> ("Mars", sf::Vector2f(2.279e11, 0), 6.4171e23, sf::Color(200,10,0), 35, sf::Vector2f(centerX+500, centerY)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+200)) );
+*/
+	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 400.0, 300.0, 20.0f, sf::Color::Yellow));
+    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 400.0 + 1.496e11, 300.0, 10.0f, sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 400.0 + 1.496e11 + 3.844e8, 300.0, 5.0f, sf::Color::White));
 
     sf::RenderWindow app(sf::VideoMode(mapWidth, mapHeight), "SFML window");
 
@@ -54,7 +59,7 @@ int main ()
 
                             if (distance <= radius) {
                                 selectedObject = obj.get();
-                                std::cout << "Planet selected : " << obj->getName() << "acc: " << obj->getAcceleration() <<"\n";
+                                std::cout << "Planet selected : " << obj->getName() << "acc: " << obj->getAx() <<"\n";
                                 break;
                             }
                         }
@@ -98,9 +103,16 @@ int main ()
 
         for(const auto& p : objects) { 
         	p->updateAcceleration(objects);
-            p->draw(app); 
+			//p->draw(app); 
         }
 
+        for(const auto& p : objects) { 
+        	p->updatePosition(3600/2);
+        }
+
+        for(const auto& p : objects) { 
+            p->draw(app); 
+        }
         app.display();
     }
     

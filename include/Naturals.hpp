@@ -9,8 +9,8 @@ class Naturals : public Objects
         float radius;
 
     public:
-        Naturals(std::string name, sf::Vector2f position, double mass, sf::Color color, float radius, sf::Vector2f shapePos)
-        : Objects(name, position, mass, color, std::make_unique<sf::CircleShape>(radius), shapePos ), radius(radius) 
+        Naturals(std::string name, double mass, double x, double y, float radius, sf::Color color)
+        : Objects(name, mass, x, y, color, std::make_unique<sf::CircleShape>(radius) ), radius(radius)
         {
             shape->setOrigin(radius, radius);
             setIsNatural(true);
