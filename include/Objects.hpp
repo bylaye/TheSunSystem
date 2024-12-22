@@ -17,7 +17,6 @@ class Objects
 		std::string name;
 		double mass;
 		double posX, posY;
-		double prevPosX, prevPosY;
 		double ax, ay;
 		double vx, vy;
 		sf::Color color;
@@ -27,9 +26,8 @@ class Objects
 		std::unique_ptr<sf::Shape> shape;
 
 	public:
-		Objects(std::string name, double m, double x, double y, double vy, double scale, sf::Color c, std::unique_ptr<sf::Shape> s): 
+		Objects(std::string name, double m, double x, double y, double scale, sf::Color c, std::unique_ptr<sf::Shape> s): 
 			name(name), mass(m), posX(x), posY(y), 
-			prevPosX(x), prevPosY(y), 
 			vx(0),  vy(0), scale(scale),  
 			color(c), shape(std::move(s)), ax(0), ay(0)
 		{
@@ -41,9 +39,7 @@ class Objects
 		std::string getName()			const { return name; };
 		double		getMass()			const { return mass; };
 		double		getPosX()			const { return posX; };
-		double		getPrevPosX()		const { return prevPosX; };
 		double		getPosY()			const { return posY; };
-		double		getPrevPosY()		const { return prevPosY; };
 		double		getAx()				const { return ax; };
 		double		getAy()				const { return ay; };
 		double		getVx()				const { return vx; };
@@ -65,6 +61,7 @@ class Objects
 			}
 		};
 
+
 		virtual sf::Vector2f getShapePosition() const
 		{
 			if (shape){
@@ -75,9 +72,11 @@ class Objects
 			}
 		};
 
+
 		virtual sf::Vector2f getShapeDimension() const {
 			return sf::Vector2f(0.0f, 0.0f);
 		};
+
 
 		void initialiseVelocity(const std::vector<std::unique_ptr<Objects>>& objects)
 		{
@@ -93,6 +92,7 @@ class Objects
 			}
 		}
 		
+
 		void updateAcceleration(const std::vector<std::unique_ptr<Objects>>& objects)
 		{
 			ax = 0;
@@ -115,24 +115,8 @@ class Objects
 			}
 		};
 		
-		void updatePosition(double timestep) {
-			double newPosX = 2 * posX - prevPosX + ax * timestep * timestep;
-			double newPosY = 2 * posY - prevPosY + ay * timestep * timestep;
-
-			// Mettre à jour la position précédente
-			prevPosX = posX;
-			prevPosY = posY;
-
-			// Mettre à jour la position actuelle
-			posX = newPosX;
-			posY = newPosY;
-
-			// Mettre à jour la position du shape pour le rendu
-			shape->setPosition(static_cast<float>(posX * 1e-9 + 400), static_cast<float>(posY * 1e-9 +200));
-		}
 
 		void update(double timestep) {
-			// Mettre à jour la vitesse en fonction de l'accélération
 			vx += ax * timestep;
 			vy += ay * timestep;
 
@@ -140,7 +124,6 @@ class Objects
 			posY += vy * timestep;
 
 			shape->setPosition(static_cast<float>(posX * scale + 400), static_cast<float>(posY * scale +400));
-			//std::cout << name << " shape: x= "<< shape->getPosition().x << "posX= "<< posX << "\n";
 		}
 };
 

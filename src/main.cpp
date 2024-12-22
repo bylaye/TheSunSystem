@@ -34,12 +34,12 @@ int main ()
     objects.push_back(std::make_unique<Artificials> ("Sat 1", sf::Vector2f(0, 1), 10e10, sf::Color(200,20,200), sf::Vector2f(30,20), sf::Vector2f(centerX+400, centerY+100)) );
     objects.push_back(std::make_unique<Artificials> ("Sat 2", sf::Vector2f(0, 1), 10e10, sf::Color(20,20,200), sf::Vector2f(50,70), sf::Vector2f(centerX+400, centerY+200)) );
 */
-	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 0, 20.0f, 0, sf::Color::Yellow));
-    objects.push_back(std::make_unique<Naturals>("Mercury", 3.3011e23, 5.791e10, 300.0, 47.8777e3, 8, 1e-9,  sf::Color::Green));
-    objects.push_back(std::make_unique<Naturals>("Venus", 4.8675e24, 1.082e11, 300.0, 35.026e3, 10, 1e-9,  sf::Color::Red));
-    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 1.496e11, 300.0, 29.78e3, 12, 1.e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 24.134e3, 9, 1.e-9,  sf::Color(200,100,50)));
-    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 400.0 + 1.496e11 + 3.844e8, 300.0, 29.78e3 + 1.022e3, 5, 1.3e-9, sf::Color::White));
+	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 20.0f, 0, sf::Color::Yellow));
+    objects.push_back(std::make_unique<Naturals>("Mercury", 3.3011e23, 5.791e10, 300.0, 8, 1e-9,  sf::Color::Green));
+    objects.push_back(std::make_unique<Naturals>("Venus", 4.8675e24, 1.082e11, 300.0, 10, 1e-9,  sf::Color::Red));
+    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 1.496e11, 300.0, 12, 1.e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 9, 1.e-9,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 1.496e11 + 3.844e8, 300.0, 5, 1.3e-9, sf::Color::White));
 
 
 	for(const auto& p : objects) { 
