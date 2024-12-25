@@ -64,10 +64,10 @@ int main ()
             if (event.type == sf::Event::Closed)
                 app.close();
 
-			if (event.type == sf::Event::KeyPressed) {
-		        if (event.key.code == sf::Keyboard::Up) {
+			if (event.type == sf::Event::TextEntered && !selectedObject) {
+		        if (event.text.unicode == '+') {
 		            timestep = std::min(timestep + 3600.0f, 3600.0f * 24 * 365);
-		        } else if (event.key.code == sf::Keyboard::Down) {
+		        } else if (event.text.unicode == '-') {
 		            timestep = std::max(3600.0f, timestep - 3600);
 		        }
 		    }
