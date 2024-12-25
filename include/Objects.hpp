@@ -26,9 +26,9 @@ class Objects
 		std::unique_ptr<sf::Shape> shape;
 
 	public:
-		Objects(std::string name, double m, double x, double y, double scale, sf::Color c, std::unique_ptr<sf::Shape> s): 
+		Objects(std::string name, double m, double x, double y, double vy, double scale, sf::Color c, std::unique_ptr<sf::Shape> s): 
 			name(name), mass(m), posX(x), posY(y), 
-			vx(0),  vy(0), scale(scale),  
+			vx(0),  vy(vy), scale(scale),  
 			color(c), shape(std::move(s)), ax(0), ay(0)
 		{
 			shape->setPosition(static_cast<float>(x), static_cast<float>(y));
@@ -111,7 +111,8 @@ class Objects
 			ay = 0;
 			for (const auto& obj : objects)
 			{
-				if(obj.get() != this)
+				//if(obj.get() != this && this->getName() != "Sun")
+				if(obj.get() != this && this->getMass() < obj->getMass())
 				{
 					double dx = obj->getPosX() - posX;
 					double dy = obj->getPosY() - posY;

@@ -20,22 +20,22 @@ int main ()
 
     std::vector<std::unique_ptr<Objects>> objects;
 
-	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 40.0f, 0, sf::Color::Yellow));
-    objects.push_back(std::make_unique<Naturals>("Mercury", 3.3011e23, 5.791e10, 300.0, 8, 1e-9,  sf::Color::Green));
-    objects.push_back(std::make_unique<Naturals>("Venus", 4.8675e24, 1.082e11, 300.0, 10, 1e-9,  sf::Color::Red));
-    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 1.496e11, 300.0, 12, 1.e-9,  sf::Color::Blue));
-    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 1.496e11 + 3.844e8, 300.0, 5, 1.3e-9, sf::Color::White));
-    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 9, 1.e-9,  sf::Color(200,100,50)));
-    objects.push_back(std::make_unique<Naturals>("Jupyter", 1.8982e27, 7.785e11, 300.0, 29, 3.72e-10,  sf::Color(200,100,50)));
-    objects.push_back(std::make_unique<Naturals>("Saturn", 5.6834e26, 1.433e12, 300.0, 19, 2.5e-10,  sf::Color(200,100,50)));
-    objects.push_back(std::make_unique<Naturals>("Unranus", 8.6810e25, 2.877e12, 300.0, 15, 1.4e-10,  sf::Color(200,100,50)));
-    objects.push_back(std::make_unique<Naturals>("Neptune", 1.0241e26, 4.503e12, 300.0, 17, 1.1e-10,  sf::Color(200,100,50)));
+	objects.push_back(std::make_unique<Naturals>("Sun", 1.989e30, 0.0, 300.0, 0,  40.0f, 0, sf::Color::Yellow));
+    objects.push_back(std::make_unique<Naturals>("Mercury", 3.3011e23, 5.791e10, 300.0, 47900,  8, 1e-9,  sf::Color::Green));
+    objects.push_back(std::make_unique<Naturals>("Venus", 4.8675e24, 1.082e11, 300.0, 35000, 10, 1e-9,  sf::Color::Red));
+    objects.push_back(std::make_unique<Naturals>("Earth", 5.972e24, 1.496e11, 300.0, 29800, 12, 1.e-9,  sf::Color::Blue));
+    objects.push_back(std::make_unique<Naturals>("Moon", 7.348e22, 1.496e11 + 3.844e8, 300.0, 29800+1022, 5, 1.2e-9, sf::Color::White));
+    objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 24000, 9, 1.e-9,  sf::Color(200,100,50)));
+    objects.push_back(std::make_unique<Naturals>("Jupyter", 1.8982e27, 7.785e11, 300.0, 13100, 29, 4.5e-10,  sf::Color(100,50,50)));
+    objects.push_back(std::make_unique<Naturals>("Saturn", 5.6834e26, 1.433e12, 300.0, 9600, 19, 3.e-10,  sf::Color(150,100,150)));
+    objects.push_back(std::make_unique<Naturals>("Unranus", 8.6810e25, 2.877e12, 300.0, 6800, 15, 1.8e-10,  sf::Color(100,100,200)));
+    objects.push_back(std::make_unique<Naturals>("Neptune", 1.0241e26, 4.503e12, 300.0, 5400, 17, 1.4e-10,  sf::Color(50,100,200)));
 
 
 
-	for(const auto& p : objects) { 
-		p->initialiseVelocity(objects);
-	}
+	//for(const auto& p : objects) { 
+	//	p->initialiseVelocity(objects);
+	//}
 
 	for(const auto& p : objects) { 
 		std::cout << p->getName() << " vy: " << p-> getVy() << "\n";
