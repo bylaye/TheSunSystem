@@ -28,7 +28,7 @@ int main ()
     objects.push_back(std::make_unique<Naturals>("Mars", 6.4171e23, 2.279e11, 300.0, 24000, 9, 1.e-9,  sf::Color(200,100,50)));
     objects.push_back(std::make_unique<Naturals>("Jupyter", 1.8982e27, 7.785e11, 300.0, 13100, 29, 4.5e-10,  sf::Color(100,50,50)));
     objects.push_back(std::make_unique<Naturals>("Saturn", 5.6834e26, 1.433e12, 300.0, 9600, 19, 3.e-10,  sf::Color(150,100,150)));
-    objects.push_back(std::make_unique<Naturals>("Unranus", 8.6810e25, 2.877e12, 300.0, 6800, 15, 1.8e-10,  sf::Color(100,100,200)));
+    objects.push_back(std::make_unique<Naturals>("Uranus", 8.6810e25, 2.877e12, 300.0, 6800, 15, 1.8e-10,  sf::Color(100,100,200)));
     objects.push_back(std::make_unique<Naturals>("Neptune", 1.0241e26, 4.503e12, 300.0, 5400, 17, 1.4e-10,  sf::Color(50,100,200)));
 
 
